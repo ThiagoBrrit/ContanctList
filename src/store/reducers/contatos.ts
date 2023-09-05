@@ -10,27 +10,27 @@ const initialState: ContatosState = {
   itens: [
     {
       id: 1,
-      tel: '11987465',
-      mail: 'deolvso@gmail.com',
+      tel: '(11) 98728-1594',
+      mail: 'deoliveira.tbrito@gmail.com',
       categoria: enums.Categoria.AMIGO,
       status: enums.Status.PROXIMO,
-      nome: 'thiagao'
+      nome: 'Thiago Brito de Oliveira'
     },
     {
       id: 2,
-      tel: '00465465',
-      mail: 'deolvso@gmail.com',
+      tel: '(11) 99555-2233',
+      mail: 'deliveira@gmail.com',
       categoria: enums.Categoria.FAMILIA,
       status: enums.Status.NPROXIMO,
-      nome: 'thiagaaaao'
+      nome: 'Daniel Marcos'
     },
     {
       id: 3,
-      tel: '546987465',
-      mail: 'deolvso@gmail.com',
+      tel: '(11) 98553-5473',
+      mail: 'mathias@gmail.com',
       categoria: enums.Categoria.TRABALHO,
       status: enums.Status.PROXIMO,
-      nome: 'thiagdasdao'
+      nome: 'Mathias Silva'
     }
   ]
 }
@@ -51,10 +51,36 @@ const contatoSlice = createSlice({
       if (indexDoContato >= 0) {
         state.itens[indexDoContato] = action.payload
       }
+    },
+    cadastrar: (state, action: PayloadAction<Contato>) => {
+      const ContatoExistente = state.itens.find(
+        (contato) =>
+          contato.nome.toLowerCase() === action.payload.nome.toLowerCase()
+      )
+
+      if (ContatoExistente) {
+        alert('Já existe um contato com este nome')
+      } else {
+        state.itens.push(action.payload)
+      }
+    },
+    alterarStatus: (
+      state,
+      action: PayloadAction<{ id: number; finalizado: boolean }>
+    ) => {
+      const indexDoContato = state.itens.findIndex(
+        (c) => c.id === action.payload.id
+      )
+      if (indexDoContato >= 0) {
+        state.itens[indexDoContato].status = action.payload.finalizado
+          ? enums.Status.PROXIMO
+          : enums.Status.NPROXIMO
+      }
     }
   }
 })
 
-export const { remover, editar } = contatoSlice.actions
+export const { remover, editar, cadastrar, alterarStatus } =
+  contatoSlice.actions
 
 export default contatoSlice.reducer
